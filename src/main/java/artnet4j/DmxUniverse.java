@@ -40,30 +40,46 @@ public class DmxUniverse
     }
 
 
+    /**
+     * @return
+     */
     public DmxUniverseConfig getConfig()
     {
         return config;
     }
 
 
+    /**
+     * @return
+     */
     public String getID()
     {
         return config.id;
     }
 
 
+    /**
+     * @return
+     */
     public ArtNetNode getNode()
     {
         return node;
     }
 
 
+    /**
+     * @return
+     */
     public int getNumChannels()
     {
         return config.numDmxChannels;
     }
 
 
+    /**
+     * @param sequenceID
+     * @return
+     */
     public ArtDmxPacket getPacket(int sequenceID)
     {
         ArtDmxPacket packet = new ArtDmxPacket();
@@ -107,6 +123,10 @@ public class DmxUniverse
     }
 
 
+    /**
+     * @param offset
+     * @param val
+     */
     public void setChannel(int offset, int val)
     {
         frameData[offset] = (byte) val;
@@ -133,6 +153,10 @@ public class DmxUniverse
     }
 
 
+    /**
+     * @param offset
+     * @param col
+     */
     public void setRGBPixel(int offset, int col)
     {
         offset *= 3;
@@ -142,6 +166,10 @@ public class DmxUniverse
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {

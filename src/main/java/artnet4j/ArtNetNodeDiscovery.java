@@ -48,6 +48,9 @@ public class ArtNetNodeDiscovery
     private Thread discoveryThread;
 
 
+    /**
+     * @param artNet
+     */
     public ArtNetNodeDiscovery(ArtNet artNet)
     {
         this.artNet = artNet;
@@ -55,6 +58,9 @@ public class ArtNetNodeDiscovery
     }
 
 
+    /**
+     * @param l
+     */
     public void addListener(ArtNetDiscoveryListener l)
     {
         synchronized (listeners)
@@ -64,6 +70,9 @@ public class ArtNetNodeDiscovery
     }
 
 
+    /**
+     * @param reply
+     */
     public void discoverNode(ArtPollReplyPacket reply)
     {
         InetAddress nodeIP = reply.getIPAddress();
@@ -87,6 +96,9 @@ public class ArtNetNodeDiscovery
     }
 
 
+    /**
+     * @param l
+     */
     public void removeListener(ArtNetDiscoveryListener l)
     {
         synchronized (listeners)
@@ -96,6 +108,10 @@ public class ArtNetNodeDiscovery
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run()
     {
@@ -140,12 +156,18 @@ public class ArtNetNodeDiscovery
     }
 
 
+    /**
+     * @param interval
+     */
     public void setInterval(int interval)
     {
         discoveryInterval = Math.max(interval, ArtNet.ARTPOLL_REPLY_TIMEOUT);
     }
 
 
+    /**
+     * @throws ArtNetException
+     */
     public void start()
             throws ArtNetException
     {
@@ -161,6 +183,9 @@ public class ArtNetNodeDiscovery
     }
 
 
+    /**
+     * 
+     */
     public void stop()
     {
         isActive = false;

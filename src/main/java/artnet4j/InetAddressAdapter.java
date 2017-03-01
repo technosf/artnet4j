@@ -23,6 +23,10 @@ public class InetAddressAdapter
         extends XmlAdapter<String, InetAddress>
 {
 
+    /*
+     * (non-Javadoc)
+     * @see javax.xml.bind.annotation.adapters.XmlAdapter#marshal(java.lang.Object)
+     */
     @Override
     public String marshal(InetAddress adr)
             throws Exception
@@ -31,6 +35,10 @@ public class InetAddressAdapter
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see javax.xml.bind.annotation.adapters.XmlAdapter#unmarshal(java.lang.Object)
+     */
     @Override
     public InetAddress unmarshal(String adr)
             throws Exception

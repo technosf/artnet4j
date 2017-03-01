@@ -16,18 +16,18 @@
 package artnet4j.events;
 
 import artnet4j.ArtNetServer;
-import artnet4j.packets.ArtNetPacket;
+import artnet4j.packets.AbstractArtNetPacket;
 
 public interface ArtNetServerListener
 {
 
-    void artNetPacketBroadcasted(ArtNetPacket packet);
+    void artNetPacketBroadcasted(AbstractArtNetPacket packet);
 
 
-    void artNetPacketReceived(ArtNetPacket packet);
+    void artNetPacketReceived(AbstractArtNetPacket packet);
 
 
-    void artNetPacketUnicasted(ArtNetPacket packet);
+    void artNetPacketUnicasted(AbstractArtNetPacket packet);
 
 
     void artNetServerStarted(ArtNetServer server);

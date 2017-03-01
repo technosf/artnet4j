@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import artnet4j.events.ArtNetServerEventAdapter;
 import artnet4j.events.ArtNetServerListener;
-import artnet4j.packets.ArtNetPacket;
+import artnet4j.packets.AbstractArtNetPacket;
 import artnet4j.packets.ArtPollReplyPacket;
 import artnet4j.packets.PacketType;
 
@@ -62,7 +62,7 @@ public class ArtNet
     /**
      * @param packet
      */
-    public void broadcastPacket(ArtNetPacket packet)
+    public void broadcastPacket(AbstractArtNetPacket packet)
     {
         server.broadcastPacket(packet);
     }
@@ -91,7 +91,7 @@ public class ArtNet
         {
 
             @Override
-            public void artNetPacketReceived(ArtNetPacket packet)
+            public void artNetPacketReceived(AbstractArtNetPacket packet)
             {
                 LOG.trace("packet received: {}", packet.getType());
                 if (discovery != null
@@ -200,7 +200,7 @@ public class ArtNet
      * @param packet
      * @param node
      */
-    public void unicastPacket(ArtNetPacket packet, ArtNetNode node)
+    public void unicastPacket(AbstractArtNetPacket packet, ArtNetNode node)
     {
         server.unicastPacket(packet, node.getIPAddress());
     }
@@ -212,7 +212,7 @@ public class ArtNet
      * @param packet
      * @param adr
      */
-    public void unicastPacket(ArtNetPacket packet, InetAddress adr)
+    public void unicastPacket(AbstractArtNetPacket packet, InetAddress adr)
     {
         server.unicastPacket(packet, adr);
     }
@@ -224,7 +224,7 @@ public class ArtNet
      * @param packet
      * @param adr
      */
-    public void unicastPacket(ArtNetPacket packet, String adr)
+    public void unicastPacket(AbstractArtNetPacket packet, String adr)
     {
         InetAddress targetAdress;
         try

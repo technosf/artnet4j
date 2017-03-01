@@ -23,26 +23,48 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class DmxUniverseConfig
 {
 
+    /**
+     * 
+     */
     @XmlAttribute
     public String id;
 
+    /**
+     * 
+     */
     @XmlAttribute
     @XmlJavaTypeAdapter(InetAddressAdapter.class)
     public InetAddress ip;
 
+    /**
+     * 
+     */
     @XmlAttribute(name = "universe")
     public int universeID;
 
+    /**
+     * 
+     */
     @XmlAttribute(name = "numchannels")
     public int numDmxChannels;
 
+    /**
+     * 
+     */
     @XmlAttribute(name = "port")
     public int serverPort;
 
+    /**
+     * 
+     */
     @XmlAttribute
     public boolean ignoreNumChannels;
 
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {

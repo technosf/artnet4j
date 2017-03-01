@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import artnet4j.events.ArtNetServerListener;
-import artnet4j.packets.ArtNetPacket;
+import artnet4j.packets.AbstractArtNetPacket;
 import artnet4j.packets.ArtNetPacketParser;
 import artnet4j.packets.ArtPollPacket;
 import artnet4j.packets.PacketType;
@@ -83,7 +83,7 @@ public class ArtNetServer
     }
 
 
-    public void broadcastPacket(ArtNetPacket ap)
+    public void broadcastPacket(AbstractArtNetPacket ap)
     {
         try
         {
@@ -123,7 +123,7 @@ public class ArtNetServer
             {
                 socket.receive(receivedPacket);
                 LOG.trace("received new packet");
-                ArtNetPacket packet = ArtNetPacketParser.parse(receivedPacket);
+                AbstractArtNetPacket packet = ArtNetPacketParser.parse(receivedPacket);
                 if (packet != null)
                 {
                     if (packet.getType() == PacketType.ART_POLL)
@@ -233,7 +233,7 @@ public class ArtNetServer
      * @param ap
      * @param targetAdress
      */
-    public void unicastPacket(ArtNetPacket ap, InetAddress targetAdress)
+    public void unicastPacket(AbstractArtNetPacket ap, InetAddress targetAdress)
     {
         try
         {

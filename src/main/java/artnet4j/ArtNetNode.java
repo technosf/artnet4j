@@ -48,18 +48,27 @@ public class ArtNetNode
     private byte[] dmxOuts;
 
 
+    /**
+     * 
+     */
     public ArtNetNode()
     {
         this(NodeStyle.ST_NODE);
     }
 
 
+    /**
+     * @param style
+     */
     public ArtNetNode(NodeStyle style)
     {
         nodeStyle = style;
     }
 
 
+    /**
+     * @param source
+     */
     public void extractConfig(ArtPollReplyPacket source)
     {
         setIPAddress(source.getIPAddress());
@@ -176,24 +185,37 @@ public class ArtNetNode
     }
 
 
+    /**
+     * @return
+     */
     public int getSubNet()
     {
         return subSwitch;
     }
 
 
+    /**
+     * @return
+     */
     public String getSubNetAsHex()
     {
         return ByteUtils.hex(subSwitch, 2);
     }
 
 
+    /**
+     * @param ip
+     */
     public void setIPAddress(InetAddress ip)
     {
         this.ip = ip;
     }
 
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {

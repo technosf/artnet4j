@@ -31,28 +31,28 @@ package artnet4j.events;
  */
 
 import artnet4j.ArtNetServer;
-import artnet4j.packets.ArtNetPacket;
+import artnet4j.packets.AbstractArtNetPacket;
 
 public class ArtNetServerEventAdapter
         implements ArtNetServerListener
 {
 
     @Override
-    public void artNetPacketBroadcasted(ArtNetPacket packet)
+    public void artNetPacketBroadcasted(AbstractArtNetPacket packet)
     {
 
     }
 
 
     @Override
-    public void artNetPacketReceived(ArtNetPacket packet)
+    public void artNetPacketReceived(AbstractArtNetPacket packet)
     {
 
     }
 
 
     @Override
-    public void artNetPacketUnicasted(ArtNetPacket packet)
+    public void artNetPacketUnicasted(AbstractArtNetPacket packet)
     {
 
     }
