@@ -1,18 +1,14 @@
 /*
  * This file is part of artnet4j.
- * 
  * Copyright 2009 Karsten Schmidt (PostSpectacular Ltd.)
- * 
  * artnet4j is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
  * artnet4j is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Public License
  * along with artnet4j. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class ArtNetServer extends ArtNetNode implements Runnable {
+public class ArtNetServer
+        extends ArtNetNode
+        implements Runnable
+{
 
     public static final int DEFAULT_PORT = 0x1936;
 
@@ -49,11 +48,15 @@ public class ArtNetServer extends ArtNetNode implements Runnable {
 
     protected final List<ArtNetServerListener> listeners;
 
-    public ArtNetServer() {
+
+    public ArtNetServer()
+    {
         this(DEFAULT_PORT, DEFAULT_PORT);
     }
 
-    public ArtNetServer(int port, int sendPort) {
+
+    public ArtNetServer(int port, int sendPort)
+    {
         super(NodeStyle.ST_SERVER);
         this.port = port;
         this.sendPort = sendPort;
@@ -61,89 +64,129 @@ public class ArtNetServer extends ArtNetNode implements Runnable {
         setBufferSize(2048);
     }
 
-    public void addListener(ArtNetServerListener l) {
-        synchronized (listeners) {
+
+    public void addListener(ArtNetServerListener l)
+    {
+        synchronized (listeners)
+        {
             listeners.add(l);
         }
     }
 
-    public void broadcastPacket(ArtNetPacket ap) {
-        try {
+
+    public void broadcastPacket(ArtNetPacket ap)
+    {
+        try
+        {
             DatagramPacket packet = new DatagramPacket(ap.getData(), ap
                     .getLength(), broadCastAddress, sendPort);
             socket.send(packet);
-            for (ArtNetServerListener l : listeners) {
+            for (ArtNetServerListener l : listeners)
+            {
                 l.artNetPacketBroadcasted(ap);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             logger.warning(e.getMessage());
         }
     }
 
-    public void removeListener(ArtNetServerListener l) {
-        synchronized (listeners) {
+
+    public void removeListener(ArtNetServerListener l)
+    {
+        synchronized (listeners)
+        {
             listeners.remove(l);
         }
     }
 
+
     @Override
-    public void run() {
+    public void run()
+    {
         byte[] receiveBuffer = new byte[receiveBufferSize];
         DatagramPacket receivedPacket = new DatagramPacket(receiveBuffer,
                 receiveBuffer.length);
-        try {
-            while (isRunning) {
+        try
+        {
+            while (isRunning)
+            {
                 socket.receive(receivedPacket);
                 logger.finer("received new packet");
                 ArtNetPacket packet = ArtNetPacketParser.parse(receivedPacket);
-                if (packet != null) {
-                    if (packet.getType() == PacketType.ART_POLL) {
+                if (packet != null)
+                {
+                    if (packet.getType() == PacketType.ART_POLL)
+                    {
                         sendArtPollReply(receivedPacket.getAddress(),
                                 (ArtPollPacket) packet);
                     }
-                    for (ArtNetServerListener l : listeners) {
+                    for (ArtNetServerListener l : listeners)
+                    {
                         l.artNetPacketReceived(packet);
                     }
                 }
             }
             socket.close();
             logger.info("server thread terminated.");
-            for (ArtNetServerListener l : listeners) {
+            for (ArtNetServerListener l : listeners)
+            {
                 l.artNetServerStopped(this);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
-    private void sendArtPollReply(InetAddress inetAddress, ArtPollPacket packet) {
+
+    private void sendArtPollReply(InetAddress inetAddress, ArtPollPacket packet)
+    {
         // TODO send reply with self description
     }
 
-    public void setBroadcastAddress(String address) {
-        try {
+
+    public void setBroadcastAddress(String address)
+    {
+        try
+        {
             broadCastAddress = InetAddress.getByName(address);
             logger.fine("broadcast IP set to: " + broadCastAddress);
-        } catch (UnknownHostException e) {
+        }
+        catch (UnknownHostException e)
+        {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
-    private void setBufferSize(int size) {
-        if (!isRunning) {
+
+    private void setBufferSize(int size)
+    {
+        if (!isRunning)
+        {
             receiveBufferSize = size;
         }
     }
 
-    public void start() throws SocketException, ArtNetException {
+
+    public void start()
+            throws SocketException, ArtNetException
+    {
         start(null);
     }
 
-    public void start(InetAddress networkAddress) throws SocketException, ArtNetException {
-        if (broadCastAddress == null) {
+
+    public void start(InetAddress networkAddress)
+            throws SocketException, ArtNetException
+    {
+        if (broadCastAddress == null)
+        {
             setBroadcastAddress(DEFAULT_BROADCAST_IP);
         }
-        if (socket == null) {
+        if (socket == null)
+        {
             socket = new DatagramSocket(null);
             socket.setReuseAddress(true);
 
@@ -153,21 +196,27 @@ public class ArtNetServer extends ArtNetNode implements Runnable {
             socket.bind(new InetSocketAddress(networkAddress, port));
 
             logger.info("Art-Net server started at: " + networkAddress.getHostAddress() + ":" + port);
-            for (ArtNetServerListener l : listeners) {
+            for (ArtNetServerListener l : listeners)
+            {
                 l.artNetServerStarted(this);
             }
             isRunning = true;
             serverThread = new Thread(this);
             serverThread.start();
-        } else {
+        }
+        else
+        {
             throw new ArtNetException(
                     "Couldn't create server socket, server already running?");
         }
     }
 
-    public void stop() {
+
+    public void stop()
+    {
         isRunning = false;
     }
+
 
     /**
      * Sends the given packet to the specified IP address.
@@ -175,16 +224,21 @@ public class ArtNetServer extends ArtNetNode implements Runnable {
      * @param ap
      * @param targetAdress
      */
-    public void unicastPacket(ArtNetPacket ap, InetAddress targetAdress) {
-        try {
+    public void unicastPacket(ArtNetPacket ap, InetAddress targetAdress)
+    {
+        try
+        {
             DatagramPacket packet = new DatagramPacket(ap.getData(), ap
                     .getLength(), targetAdress, sendPort);
             socket.send(packet);
             logger.finer("sent packet to: " + targetAdress);
-            for (ArtNetServerListener l : listeners) {
+            for (ArtNetServerListener l : listeners)
+            {
                 l.artNetPacketUnicasted(ap);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             logger.warning(e.getMessage());
         }
     }
