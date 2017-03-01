@@ -15,22 +15,31 @@
 
 package artnet4j;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import artnet4j.events.ArtNetServerListener;
 import artnet4j.packets.ArtNetPacket;
 import artnet4j.packets.ArtNetPacketParser;
 import artnet4j.packets.ArtPollPacket;
 import artnet4j.packets.PacketType;
 
-import java.io.IOException;
-import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-
 public class ArtNetServer
         extends ArtNetNode
         implements Runnable
 {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ArtNetServer.class);
 
     public static final int DEFAULT_PORT = 0x1936;
 
@@ -88,7 +97,7 @@ public class ArtNetServer
         }
         catch (IOException e)
         {
-            logger.warning(e.getMessage());
+            LOG.warn(e.getMessage());
         }
     }
 
@@ -113,7 +122,7 @@ public class ArtNetServer
             while (isRunning)
             {
                 socket.receive(receivedPacket);
-                logger.finer("received new packet");
+                LOG.trace("received new packet");
                 ArtNetPacket packet = ArtNetPacketParser.parse(receivedPacket);
                 if (packet != null)
                 {
@@ -129,7 +138,7 @@ public class ArtNetServer
                 }
             }
             socket.close();
-            logger.info("server thread terminated.");
+            LOG.info("server thread terminated.");
             for (ArtNetServerListener l : listeners)
             {
                 l.artNetServerStopped(this);
@@ -153,11 +162,11 @@ public class ArtNetServer
         try
         {
             broadCastAddress = InetAddress.getByName(address);
-            logger.fine("broadcast IP set to: " + broadCastAddress);
+            LOG.trace("broadcast IP set to: {}", broadCastAddress);
         }
         catch (UnknownHostException e)
         {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            LOG.warn(e.getMessage(), e);
         }
     }
 
@@ -195,7 +204,7 @@ public class ArtNetServer
 
             socket.bind(new InetSocketAddress(networkAddress, port));
 
-            logger.info("Art-Net server started at: " + networkAddress.getHostAddress() + ":" + port);
+            LOG.info("Art-Net server started at: {}:{}", networkAddress.getHostAddress(), port);
             for (ArtNetServerListener l : listeners)
             {
                 l.artNetServerStarted(this);
@@ -231,7 +240,7 @@ public class ArtNetServer
             DatagramPacket packet = new DatagramPacket(ap.getData(), ap
                     .getLength(), targetAdress, sendPort);
             socket.send(packet);
-            logger.finer("sent packet to: " + targetAdress);
+            LOG.trace("sent packet to: {}", targetAdress);
             for (ArtNetServerListener l : listeners)
             {
                 l.artNetPacketUnicasted(ap);
@@ -239,7 +248,7 @@ public class ArtNetServer
         }
         catch (IOException e)
         {
-            logger.warning(e.getMessage());
+            LOG.warn(e.getMessage());
         }
     }
 }

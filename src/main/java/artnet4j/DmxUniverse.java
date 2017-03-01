@@ -28,6 +28,10 @@ public class DmxUniverse
     protected boolean isActive = true;
 
 
+    /**
+     * @param node
+     * @param config
+     */
     public DmxUniverse(ArtNetNode node, DmxUniverseConfig config)
     {
         this.node = node;

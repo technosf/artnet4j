@@ -19,7 +19,9 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import artnet4j.events.ArtNetDiscoveryListener;
 import artnet4j.packets.ArtPollPacket;
@@ -31,8 +33,7 @@ public class ArtNetNodeDiscovery
 
     public static final int POLL_INTERVAL = 10000;
 
-    public static final Logger logger = Logger
-            .getLogger(ArtNetNodeDiscovery.class.getClass().getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ArtNetNodeDiscovery.class);
 
     protected final ArtNet artNet;
     protected ConcurrentHashMap<InetAddress, ArtNetNode> discoveredNodes =
@@ -69,7 +70,7 @@ public class ArtNetNodeDiscovery
         ArtNetNode node = discoveredNodes.get(nodeIP);
         if (node == null)
         {
-            logger.info("discovered new node: " + nodeIP);
+            LOG.info("discovered new node: {}", nodeIP);
             node = reply.getNodeStyle().createNode();
             node.extractConfig(reply);
             discoveredNodes.put(nodeIP, node);
@@ -134,7 +135,7 @@ public class ArtNetNodeDiscovery
         }
         catch (InterruptedException e)
         {
-            logger.warning("node discovery interrupted");
+            LOG.warn("node discovery interrupted");
         }
     }
 

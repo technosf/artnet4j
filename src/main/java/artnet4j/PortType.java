@@ -14,21 +14,44 @@
  */
 package artnet4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum PortType
 {
     DMX512(0), MIDI(1), AVAB(2), COLORTRAN(3), ADB62_5(4), ARTNET(5);
 
-    private int id;
+    private static final Map<Integer, PortType> TYPES = new HashMap<>();
+    static
+    {
+        for (PortType node : PortType.values())
+        {
+            TYPES.put(node.id, node);
+        }
+    }
+
+    public final int id;
 
 
+    /**
+     * @param id
+     */
     private PortType(int id)
     {
         this.id = id;
     }
 
 
-    public int getPortID()
+    /*
+     * Static methods
+     */
+
+    /**
+     * @param id
+     * @return
+     */
+    public static PortType getForID(int id)
     {
-        return id;
+        return TYPES.get(id);
     }
 }

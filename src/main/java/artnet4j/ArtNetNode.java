@@ -16,7 +16,9 @@
 package artnet4j;
 
 import java.net.InetAddress;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import artnet4j.packets.ArtPollReplyPacket;
 import artnet4j.packets.ByteUtils;
@@ -24,8 +26,7 @@ import artnet4j.packets.ByteUtils;
 public class ArtNetNode
 {
 
-    protected static final Logger logger = Logger.getLogger(ArtNetNode.class
-            .getClass().getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ArtNetNode.class);
 
     protected final NodeStyle nodeStyle;
 
@@ -72,7 +73,7 @@ public class ArtNetNode
         reportCode = source.getReportCode();
         dmxIns = source.getDmxIns();
         dmxOuts = source.getDmxOuts();
-        logger.info("updated node config");
+        LOG.info("updated node config");
     }
 
 

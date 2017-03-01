@@ -14,6 +14,9 @@
  */
 package artnet4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum NodeReportCode
 {
 
@@ -45,24 +48,23 @@ public enum NodeReportCode
     RcUserFail("#000f",
             "User changed switch settings when address locked by remote.");
 
-    public static NodeReportCode getForID(String id)
+    private static final Map<String, NodeReportCode> CODES = new HashMap<>();
+    static
     {
-        NodeReportCode code = null;
-        for (NodeReportCode c : values())
+        for (NodeReportCode node : NodeReportCode.values())
         {
-            if (c.id.equalsIgnoreCase(id))
-            {
-                code = c;
-                break;
-            }
+            CODES.put(node.description, node);
         }
-        return code;
     }
 
-    private final String id;
-    private final String description;
+    public final String id;
+    public final String description;
 
 
+    /**
+     * @param id
+     * @param desc
+     */
     private NodeReportCode(String id, String desc)
     {
         this.id = id;
@@ -70,20 +72,12 @@ public enum NodeReportCode
     }
 
 
-    /**
-     * @return the description
+    /*
+     * Static methods
      */
-    public String getDescription()
-    {
-        return description;
-    }
 
-
-    /**
-     * @return the id
-     */
-    public String getID()
+    public static NodeReportCode getForID(String id)
     {
-        return id;
+        return CODES.get(id);
     }
 }

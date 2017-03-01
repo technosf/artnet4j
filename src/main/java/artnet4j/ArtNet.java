@@ -15,23 +15,23 @@
 
 package artnet4j;
 
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import artnet4j.events.ArtNetServerEventAdapter;
 import artnet4j.events.ArtNetServerListener;
 import artnet4j.packets.ArtNetPacket;
 import artnet4j.packets.ArtPollReplyPacket;
 import artnet4j.packets.PacketType;
 
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class ArtNet
 {
 
-    public static final Logger logger =
-            Logger.getLogger(ArtNet.class.getClass().getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ArtNet.class);
 
     protected static final long ARTPOLL_REPLY_TIMEOUT = 3000;
 
@@ -41,24 +41,36 @@ public class ArtNet
     protected ArtNetNodeDiscovery discovery;
 
 
+    /**
+     * 
+     */
     public ArtNet()
     {
-        logger.info("Art-Net v" + VERSION);
+        LOG.info("Art-Net v{}", VERSION);
     }
 
 
+    /**
+     * @param l
+     */
     public void addServerListener(ArtNetServerListener l)
     {
         server.addListener(l);
     }
 
 
+    /**
+     * @param packet
+     */
     public void broadcastPacket(ArtNetPacket packet)
     {
         server.broadcastPacket(packet);
     }
 
 
+    /**
+     * @return
+     */
     public ArtNetNodeDiscovery getNodeDiscovery()
     {
         if (discovery == null)
@@ -69,6 +81,9 @@ public class ArtNet
     }
 
 
+    /**
+     * 
+     */
     public void init()
     {
         server = new ArtNetServer();
@@ -78,7 +93,7 @@ public class ArtNet
             @Override
             public void artNetPacketReceived(ArtNetPacket packet)
             {
-                logger.fine("packet received: " + packet.getType());
+                LOG.trace("packet received: {}", packet.getType());
                 if (discovery != null
                         && packet.getType() == PacketType.ART_POLL_REPLY)
                 {
@@ -90,25 +105,31 @@ public class ArtNet
             @Override
             public void artNetServerStarted(ArtNetServer artNetServer)
             {
-                logger.fine("server started callback");
+                LOG.trace("server started callback");
             }
 
 
             @Override
             public void artNetServerStopped(ArtNetServer artNetServer)
             {
-                logger.info("server stopped");
+                LOG.info("server stopped");
             }
         });
     }
 
 
+    /**
+     * @param l
+     */
     public void removeServerListener(ArtNetServerListener l)
     {
         server.removeListener(l);
     }
 
 
+    /**
+     * @param ip
+     */
     public void setBroadCastAddress(String ip)
     {
         server.setBroadcastAddress(ip);
@@ -147,6 +168,9 @@ public class ArtNet
     }
 
 
+    /**
+     * @throws ArtNetException
+     */
     public void startNodeDiscovery()
             throws ArtNetException
     {
@@ -154,6 +178,9 @@ public class ArtNet
     }
 
 
+    /**
+     * 
+     */
     public void stop()
     {
         if (discovery != null)
@@ -207,7 +234,7 @@ public class ArtNet
         }
         catch (UnknownHostException e)
         {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 }
